@@ -41,8 +41,8 @@ Table 2. All findings on the starter code
 
 | No. | File:line | Finding | Found by (SonarQube, AI or both) | SonarQube rule or course term | Correct? (yes or no, and why) |
 | --- | --- | --- | --- | --- | --- |
-| 1 | ParcelService.java:42 | String codes are compared using ==. | AI | String identity comparison | Yes; == compares references, so equal text from separate input lines can fail to match. |
-| 2 | ParcelService.java:76–79 | FileWriter is never flushed or closed. | AI | Resource management | Yes; there is no close(), flush(), or try-with-resources, so buffered data may remain unwritten. |
+| 1 | ParcelService.java:42 | String codes are compared using ==. | both | String identity comparison | Yes; == compares references, so equal text from separate input lines can fail to match. |
+| 2 | ParcelService.java:76–79 | FileWriter is never flushed or closed. | both | Resource management | Yes; there is no close(), flush(), or try-with-resources, so buffered data may remain unwritten. |
 | 3 | ParcelService.java:80–81 | The empty catch block hides saving failures. | both | java:S108; exception handling | Yes; IOException is caught without reporting or recovery. |
 | 4 | Main.java:13,17 | Command arguments and numeric input are not validated. | AI | Input validation | Yes; direct array indexing and Integer.parseInt can throw uncaught exceptions. |
 | 5 | Main.java:11 | Splitting on one space mishandles repeated spaces and tabs. | AI | Input parsing | Yes; split(" ") can produce empty arguments and does not split tabs. |
@@ -73,11 +73,11 @@ Table 2. All findings on the starter code
 | 30 | ParcelService.java:67 | System.out is used for the staff report. | SonarQube | java:S106 | Yes; the reported System.out call exists. Staff output is intentional CLI behavior and can be assessed in Task 3. |
 | 31 | ParcelService.java:69 | System.out is used for the waiting-parcel report. | SonarQube | java:S106 | Yes; the reported System.out call exists. Report output is intentional CLI behavior and can be assessed in Task 3. |
 
-The AI rows follow findings 1–27 in `reviews/parcelpoint-review.md`; rows 28–31 add SonarQube-only findings. “Found by” refers to the captured SonarQube results in Table 1, excluding Java-extension warnings. Repeated occurrences of S106 remain separate because they have different locations. The unused Date import and the legacy-date API rule are different findings even though removing the same import resolves both.
+The AI rows follow findings 1–27 in `reviews/parcelpoint-review.md`; rows 28–31 add SonarQube-only findings. “Found by” includes the initial SonarQube capture in Table 1 and the later capture that additionally reported String comparison and FileWriter closure. These two later findings existed in the starter; their complete rule IDs were not visible in the later screenshot. Java-extension warnings are excluded. Repeated occurrences of S106 remain separate because they have different locations. The unused Date import and the legacy-date API rule are different findings even though removing the same import resolves both.
 
 2.1 Name two problems that only the AI review found.
 
-The AI found that `ParcelService.java:42` compares String references with `==`, which can prevent pickup of a matching code. It also found control coupling at `Main.java:19,21` and `ParcelService.java:64–68`, where a boolean selects the reporting behavior. Neither appears in the captured SonarQube issues in Table 1.
+The AI found missing argument-count and integer-input validation at `Main.java:13,17`. It also found control coupling at `Main.java:19,21` and `ParcelService.java:64–68`, where a boolean selects the reporting behavior. Neither appears in the supplied SonarQube captures; String comparison and FileWriter closure were also reported by SonarQube in the later capture and are therefore not AI-only findings.
 
 2.2 Name one problem that only SonarQube found, or write none.
 
@@ -93,22 +93,49 @@ Table 3. What you did with each SonarQube issue in Table 1
 
 | No. in Table 1 | Fixed or kept | Commit, or the reason for keeping it |
 | --- | --- | --- |
-| 1 | | |
+| 1 | Fixed | ef29b1b |
+| 2 | Fixed | b602510 |
+| 3 | Kept | System.out intentionally displays the parcel storage notification to the CLI user. |
+| 4 | Kept | System.out intentionally displays the staff report requested by the CLI user. |
+| 5 | Kept | System.out intentionally displays waiting parcels requested by the CLI user. |
+| 6 | Fixed | f8ca278 |
 
-Number of SonarQube issues that remain after your fixes:
+Number of SonarQube issues that remain after your fixes: Pending a fresh SonarQube for IDE analysis. Three intentional S106 occurrences are kept; this is not yet a verified total.
+
+Additional fixes for findings shown in the later SonarQube capture:
+
+| Finding (starter location) | Change | Commit |
+| --- | --- | --- |
+| String comparison, ParcelService.java:42 | Compare parcel codes with equals() instead of ==. | 6d06079 |
+| Unclosed FileWriter, ParcelService.java:76–79 | Use try-with-resources to flush and close the writer. | 30d8810 |
+
+The later screenshot showed a count of six but only five visible rows, so its unidentified additional occurrence must be checked in the IDE. Table 1 preserves the original capture rather than inventing a rule or message for that occurrence.
 
 The two design problems that you fixed
 
 | Design problem (course term) | What you changed | Commit |
 | --- | --- | --- |
-| | | |
-| | | |
+| Control coupling (Table 2, row 21) | Replace printParcels(boolean) with printStaffReport() and printWaitingParcels(), and update Main. | 8cbc87a |
+| Encapsulation leak and reach-through coupling (Table 2, rows 23–24) | Replace getLockers() with countFreeLockers() so Main no longer accesses the internal collection. | 5df1fd2 |
 
 Output of the program after your fixes, for the commands `store P1 6501 2`, `pickup P1 5` and `staff`, and the content of parcels.csv:
 
 ```text
-
+Commands: store <code> <studentId> <size 1-3>, pickup <code> <days>, list, staff, quit
+SMS to 6501: parcel P1 is in locker 2
+Locker 2
+Fee: 30.0
+P1 6501 PICKED_UP
+Free lockers: 3
 ```
+
+Content of `parcelpoint/parcels.csv`:
+
+```text
+P1,PICKED_UP
+```
+
+Validation: Maven package succeeded after each of the four additional fixes. The original command sequence produced the output above. The list/staff check showed the waiting parcel before pickup, no waiting parcel after pickup, and free lockers changing from two to three. A separate run in a temporary directory with `parcels.csv` deliberately made a directory confirmed that saving failure produces `UncheckedIOException` with the message `Failed to save parcels.csv`. Generated CSV and target files remain ignored.
 
 ## Task 4. AI-generated poor and good designs
 
@@ -143,4 +170,4 @@ Output of the program after your fixes, for the commands `store P1 6501 2`, `pic
 
 | AI tool and exact model | Purpose | Files or parts that it produced or changed | How you checked its output |
 | --- | --- | --- | --- |
-| | | | |
+| Codex (GPT-6, as identified by this session; exact UI variant not independently verified) | Validate findings and assist with Task 3 fixes and reporting | LAB_REPORT.md; ParcelService.java; Main.java | Compared findings to source; built after each fix; exercised pickup, reporting, CSV output, and a saving-failure case. |

@@ -141,10 +141,10 @@ Validation: Maven package succeeded after each of the four additional fixes. The
 | --- | --- | --- |
 | Date | 24 Oct 2026 | 24 Oct 2026 |
 | AI tool and exact model | Codex GPT 6.1 Sol Light (user-reported) | Codex GPT 6.1 Sol Light |
-| Prompt (B or C as given, or your changed prompt in full) | Prompt B as given in prompts.md, with the complete BikeShare specification (the opening station/setup sentence and items 1–6) pasted into the specification placeholder. | Prompt C (user-reported); confirm the complete specification and any prompt changes |
+| Prompt (B or C as given, or your changed prompt in full) | Prompt B as given in prompts.md, with the complete BikeShare specification (the opening station/setup sentence and items 1–6) pasted into the specification placeholder. | Prompt C as given in prompts.md, with the complete BikeShare specification (the opening station/setup sentence and items 1–6) pasted into the specification placeholder. |
 | Builds with mvn package (yes or no) | Yes; BUILD SUCCESS on 24 Oct 2026 | Yes; user-provided BUILD SUCCESS on 24 Oct 2026 at 22:12:27 +07:00 |
 | Number of classes, interfaces, enums and records | 1 class (BikeShare), 0 interfaces, 0 enums, 0 records | 5 classes, 1 interface, 2 enums, 0 records |
-| SonarQube issues, total | 18 | 3 (analysis coverage of all 8 Java files remains to be confirmed) |
+| SonarQube issues, total | 18 | 3 |
 | SonarQube issues, by rule | java:S106 × 9; java:S2386 × 4; java:S1220 × 1; java:S1172 × 1; java:S135 × 1; java:S3776 × 1; java:S3358 × 1 | java:S1172 × 1; java:S106 × 1; java:S135 × 1 |
 | AI review findings in Check 1 | 5 | 1 |
 | AI review findings in Check 2 | 4 | 2 |
@@ -166,7 +166,7 @@ No build-error repair was needed. These checks establish the tested behavior, no
 
 Good-version Prompt A review: Check 1 contains 1 finding and Check 2 contains 2 findings; “not found” rows are excluded. The complete review is saved in `reviews/bikeshare-good-review.md`. Review date: 24 Oct 2026. AI tool and exact model: Codex GPT 6.1 Sol Light.
 
-Good-version SonarQube results: SonarQube for IDE reported S1172 at Main.java:8 (unused args), S106 at Main.java:12 (System.out), and S135 at ConsoleMenu.java:21 (multiple break/continue statements). The additional locations under S135 belong to the same finding. ParcelPoint findings are excluded. Analysis coverage of all eight Java files remains to be confirmed.
+Good-version SonarQube results: SonarQube for IDE reported S1172 at Main.java:8 (unused args), S106 at Main.java:12 (System.out), and S135 at ConsoleMenu.java:21 (multiple break/continue statements). The additional locations under S135 belong to the same finding. ParcelPoint findings are excluded. All eight Java files were opened and analyzed in SonarQube for IDE.
 
 Good-version validation: The user built the supplied Prompt C project without code repairs and tested the same student and staff rentals, cross-station returns, and exhausted Dorm inventory. Fees were 20 baht for the 10-minute student ride and 30 baht for the 10-minute staff ride. The third Dorm rental was rejected with `Invalid input: No bikes available at DORM.` The actual `bikeshare-good/rides.csv` was inspected and contained:
 
@@ -175,7 +175,7 @@ Good-version validation: The user built the supplied Prompt C project without co
 5,"S1",10,30
 ```
 
-The CSV layout differs from the poor version but records both completed rides. SonarQube for IDE results are recorded above, with full-file analysis coverage still to be confirmed. Prompt A review counts are recorded above; successful runtime checks do not establish design quality.
+The CSV layout differs from the poor version but records both completed rides. SonarQube for IDE results above cover all eight Java files. Prompt A review counts are recorded above; successful runtime checks do not establish design quality.
 
 4.1 Did SonarQube report any cohesion or coupling problem in bikeshare-poor? Quote the rule and the message if it did.
 

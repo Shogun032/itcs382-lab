@@ -15,8 +15,8 @@ public class ParcelService {
         lockers.add(new Locker(3, 3));
     }
 
-    public List<Locker> getLockers() {
-        return lockers;
+    public long countFreeLockers() {
+        return lockers.stream().filter(Locker::isFree).count();
     }
 
     public Locker storeParcel(Parcel parcel) {

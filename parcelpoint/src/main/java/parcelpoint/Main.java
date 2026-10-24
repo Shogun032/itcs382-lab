@@ -19,7 +19,7 @@ public class Main {
                 service.printWaitingParcels();
             } else if (words[0].equals("staff")) {
                 service.printStaffReport();
-                System.out.println("Free lockers: " + service.getLockers().stream().filter(Locker::isFree).count());
+                System.out.println("Free lockers: " + service.countFreeLockers());
             } else if (words[0].equals("quit")) {
                 break;
             }

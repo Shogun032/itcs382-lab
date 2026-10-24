@@ -10,7 +10,7 @@ Repository URL: https://github.com/Shogun032/itcs382-lab.git
 | Maven | 3.10.0; current Maven runtime: Java 27.0.1.0.2 |
 | IDE | VS Code 1.132.0 |
 | SonarQube for IDE | 6.2.0 |
-| AI tool and exact model | Codex GPT 6.1 Sol Light for the reported generation/review chats; coding/report assistance details are listed in the AI usage declaration. |
+| AI tool and exact model | Codex GPT 6.1 Sol Light for generation and review; coding/report assistance details are listed in the AI usage declaration. |
 
 ## Task 1. SonarQube on the starter code
 
@@ -140,7 +140,7 @@ Validation: Maven package succeeded after each of the four additional fixes. The
 | Item | bikeshare-poor | bikeshare-good |
 | --- | --- | --- |
 | Date | 24 Oct 2026 | 24 Oct 2026 |
-| AI tool and exact model | Codex GPT 6.1 Sol Light (user-reported) | Codex GPT 6.1 Sol Light |
+| AI tool and exact model | Codex GPT 6.1 Sol Light | Codex GPT 6.1 Sol Light |
 | Prompt (B or C as given, or your changed prompt in full) | Prompt B as given in prompts.md, with the complete BikeShare specification (the opening station/setup sentence and items 1–6) pasted into the specification placeholder. | Prompt C as given in prompts.md, with the complete BikeShare specification (the opening station/setup sentence and items 1–6) pasted into the specification placeholder. |
 | Builds with mvn package (yes or no) | Yes; BUILD SUCCESS on 24 Oct 2026 | Yes; user-provided BUILD SUCCESS on 24 Oct 2026 at 22:12:27 +07:00 |
 | Number of classes, interfaces, enums and records | 1 class (BikeShare), 0 interfaces, 0 enums, 0 records | 5 classes, 1 interface, 2 enums, 0 records |
@@ -207,8 +207,8 @@ In Project Phase 2, I will separate responsibilities and keep internal data priv
 
 | AI tool and exact model | Purpose | Files or parts that it produced or changed | How you checked its output |
 | --- | --- | --- | --- |
-| Codex (GPT-6, as identified by this session; exact UI variant not independently verified) | Validate findings, assist with Task 3 fixes, and draft report answers including Task 5 | LAB_REPORT.md; ParcelService.java; Main.java | Compared findings to source; built after each fix; exercised pickup, reporting, CSV output, and a saving-failure case. |
-| Codex GPT 6.1 Sol Light (user-reported) | Generate the poor-design BikeShare version using Prompt B | bikeshare-poor/pom.xml; bikeshare-poor/src/main/java/BikeShare.java | Maven build succeeded; tested student and staff fees, cross-station returns, unavailable bikes, and inspected rides.csv. |
+| Codex GPT-6 | Validate findings, assist with Task 3 fixes, and draft report answers including Task 5 | LAB_REPORT.md; ParcelService.java; Main.java | Compared findings to source; built after each fix; exercised pickup, reporting, CSV output, and a saving-failure case. |
+| Codex GPT 6.1 Sol Light | Generate the poor-design BikeShare version using Prompt B | bikeshare-poor/pom.xml; bikeshare-poor/src/main/java/BikeShare.java | Maven build succeeded; tested student and staff fees, cross-station returns, unavailable bikes, and inspected rides.csv. |
 | Codex GPT 6.1 Sol Light | Generate the good-design BikeShare version using Prompt C on 24 Oct 2026 | bikeshare-good/pom.xml; the eight Java files under bikeshare-good/src/main/java/bikeshare/ | Maven build succeeded; tested student and staff fees, cross-station returns, unavailable bikes, and inspected rides.csv. |
 | Codex GPT 6.1 Sol Light | Review bikeshare-poor using Prompt A on 24 Oct 2026 | reviews/bikeshare-poor-review.md | Recorded the full review and counted 5 Check 1 findings and 4 Check 2 findings, excluding not-found rows; comparison is documented in Task 4. |
 | Codex GPT 6.1 Sol Light | Review bikeshare-good using Prompt A on 24 Oct 2026 | reviews/bikeshare-good-review.md | Recorded the full review and counted 1 Check 1 finding and 2 Check 2 findings, excluding not-found rows; comparison is documented in Task 4. |

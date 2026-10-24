@@ -76,6 +76,7 @@ public class ParcelService {
                 writer.write(parcel.getCode() + "," + parcel.status + "\n");
             }
         } catch (IOException e) {
+            throw new java.io.UncheckedIOException("Failed to save parcels.csv", e);
         }
     }
 }

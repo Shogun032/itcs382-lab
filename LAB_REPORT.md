@@ -7,10 +7,10 @@ Repository URL: https://github.com/Shogun032/itcs382-lab.git
 | Item | Version or name |
 | --- | --- |
 | JDK | 21.0.7 |
-| Maven | 3.10.0 |
-| IDE | VS Code |
-| SonarQube for IDE | |
-| AI tool and exact model | |
+| Maven | 3.10.0; current Maven runtime: Java 27.0.1.0.2 |
+| IDE | VS Code 1.132.0 |
+| SonarQube for IDE | 6.2.0 |
+| AI tool and exact model | Codex GPT 6.1 Sol Light for the reported generation/review chats; coding/report assistance details are listed in the AI usage declaration. |
 
 ## Task 1. SonarQube on the starter code
 
@@ -73,11 +73,11 @@ Table 2. All findings on the starter code
 | 30 | ParcelService.java:67 | System.out is used for the staff report. | SonarQube | java:S106 | Yes; the reported System.out call exists. Staff output is intentional CLI behavior and can be assessed in Task 3. |
 | 31 | ParcelService.java:69 | System.out is used for the waiting-parcel report. | SonarQube | java:S106 | Yes; the reported System.out call exists. Report output is intentional CLI behavior and can be assessed in Task 3. |
 
-The AI rows follow findings 1–27 in `reviews/parcelpoint-review.md`; rows 28–31 add SonarQube-only findings. “Found by” includes the initial SonarQube capture in Table 1 and the later capture that additionally reported String comparison and FileWriter closure. These two later findings existed in the starter; their complete rule IDs were not visible in the later screenshot. Java-extension warnings are excluded. Repeated occurrences of S106 remain separate because they have different locations. The unused Date import and the legacy-date API rule are different findings even though removing the same import resolves both.
+The AI rows follow findings 1–27 in `reviews/parcelpoint-review.md`; rows 28–31 add SonarQube-only findings. “Found by” includes the initial SonarQube analysis in Table 1 and the later analysis that additionally reported String comparison and FileWriter closure. These two later findings existed in the starter; their complete rule IDs were not recorded. Java-extension warnings are excluded. Repeated occurrences of S106 remain separate because they have different locations. The unused Date import and the legacy-date API rule are different findings even though removing the same import resolves both.
 
 2.1 Name two problems that only the AI review found.
 
-The AI found missing argument-count and integer-input validation at `Main.java:13,17`. It also found control coupling at `Main.java:19,21` and `ParcelService.java:64–68`, where a boolean selects the reporting behavior. Neither appears in the supplied SonarQube captures; String comparison and FileWriter closure were also reported by SonarQube in the later capture and are therefore not AI-only findings.
+The AI found missing argument-count and integer-input validation at `Main.java:13,17`. It also found control coupling at `Main.java:19,21` and `ParcelService.java:64–68`, where a boolean selects the reporting behavior. Neither appears in the recorded SonarQube results; String comparison and FileWriter closure were also reported by SonarQube in the later analysis and are therefore not AI-only findings.
 
 2.2 Name one problem that only SonarQube found, or write none.
 
@@ -100,16 +100,14 @@ Table 3. What you did with each SonarQube issue in Table 1
 | 5 | Kept | System.out intentionally displays waiting parcels requested by the CLI user. |
 | 6 | Fixed | f8ca278 |
 
-Number of SonarQube issues that remain after your fixes: Pending a fresh SonarQube for IDE analysis. Three intentional S106 occurrences are kept; this is not yet a verified total.
+Number of SonarQube issues that remain after your fixes: 3 (all are intentionally kept java:S106 occurrences in SonarQube for IDE).
 
-Additional fixes for findings shown in the later SonarQube capture:
+Additional fixes for findings shown in the later SonarQube analysis:
 
 | Finding (starter location) | Change | Commit |
 | --- | --- | --- |
 | String comparison, ParcelService.java:42 | Compare parcel codes with equals() instead of ==. | 6d06079 |
 | Unclosed FileWriter, ParcelService.java:76–79 | Use try-with-resources to flush and close the writer. | 30d8810 |
-
-The later screenshot showed a count of six but only five visible rows, so its unidentified additional occurrence must be checked in the IDE. Table 1 preserves the original capture rather than inventing a rule or message for that occurrence.
 
 The two design problems that you fixed
 
@@ -141,33 +139,76 @@ Validation: Maven package succeeded after each of the four additional fixes. The
 
 | Item | bikeshare-poor | bikeshare-good |
 | --- | --- | --- |
-| Date | | |
-| AI tool and exact model | | |
-| Prompt (B or C as given, or your changed prompt in full) | | |
-| Builds with mvn package (yes or no) | | |
-| Number of classes, interfaces, enums and records | | |
-| SonarQube issues, total | | |
-| SonarQube issues, by rule | | |
-| AI review findings in Check 1 | | |
-| AI review findings in Check 2 | | |
-| Review output file in the reviews folder | | |
+| Date | 24 Oct 2026 | 24 Oct 2026 |
+| AI tool and exact model | Codex GPT 6.1 Sol Light (user-reported) | Codex GPT 6.1 Sol Light |
+| Prompt (B or C as given, or your changed prompt in full) | Prompt B as given in prompts.md, with the complete BikeShare specification (the opening station/setup sentence and items 1–6) pasted into the specification placeholder. | Prompt C (user-reported); confirm the complete specification and any prompt changes |
+| Builds with mvn package (yes or no) | Yes; BUILD SUCCESS on 24 Oct 2026 | Yes; user-provided BUILD SUCCESS on 24 Oct 2026 at 22:12:27 +07:00 |
+| Number of classes, interfaces, enums and records | 1 class (BikeShare), 0 interfaces, 0 enums, 0 records | 5 classes, 1 interface, 2 enums, 0 records |
+| SonarQube issues, total | 18 | 3 (analysis coverage of all 8 Java files remains to be confirmed) |
+| SonarQube issues, by rule | java:S106 × 9; java:S2386 × 4; java:S1220 × 1; java:S1172 × 1; java:S135 × 1; java:S3776 × 1; java:S3358 × 1 | java:S1172 × 1; java:S106 × 1; java:S135 × 1 |
+| AI review findings in Check 1 | 5 | 1 |
+| AI review findings in Check 2 | 4 | 2 |
+| Review output file in the reviews folder | reviews/bikeshare-poor-review.md | reviews/bikeshare-good-review.md |
+
+
+Poor-version Prompt A review: Check 1 contains 5 findings and Check 2 contains 4 findings; “not found” rows are excluded. The complete review is saved in `reviews/bikeshare-poor-review.md`, with Markdown table formatting repaired and the review wording preserved. Review date: 24 Oct 2026. AI tool and exact model: Codex GPT 6.1 Sol Light.
+
+Poor-version SonarQube results: SonarQube for IDE reported 18 findings for BikeShare.java. ParcelPoint findings are excluded from this total. Additional locations such as `[+14 locations]` are not counted as separate findings. BikeShare rule locations: S1220 at line 1; S2386 at lines 10–13; S1172 at line 15; S106 at lines 16, 17, 18, 36, 38, 42, 73, 88, 92; S135 at line 20; S3776 at line 47; S3358 at line 79.
+
+Poor-version validation: The supplied code built without modification. The user ran student rental and return (bike 1, 10 minutes, 20 baht), staff rental and return (bike 5, 10 minutes, 30 baht), and attempted a third rental at Dorm after renting its two bikes (reported no bikes available). Returns to a different station succeeded. The resulting `rides.csv` was inspected and contained:
+
+```text
+1,6501,1,Canteen,10,20
+5,S1,2,Library,10,30
+```
+
+No build-error repair was needed. These checks establish the tested behavior, not the absence of all bugs or design problems.
+
+Good-version Prompt A review: Check 1 contains 1 finding and Check 2 contains 2 findings; “not found” rows are excluded. The complete review is saved in `reviews/bikeshare-good-review.md`. Review date: 24 Oct 2026. AI tool and exact model: Codex GPT 6.1 Sol Light.
+
+Good-version SonarQube results: SonarQube for IDE reported S1172 at Main.java:8 (unused args), S106 at Main.java:12 (System.out), and S135 at ConsoleMenu.java:21 (multiple break/continue statements). The additional locations under S135 belong to the same finding. ParcelPoint findings are excluded. Analysis coverage of all eight Java files remains to be confirmed.
+
+Good-version validation: The user built the supplied Prompt C project without code repairs and tested the same student and staff rentals, cross-station returns, and exhausted Dorm inventory. Fees were 20 baht for the 10-minute student ride and 30 baht for the 10-minute staff ride. The third Dorm rental was rejected with `Invalid input: No bikes available at DORM.` The actual `bikeshare-good/rides.csv` was inspected and contained:
+
+```text
+1,"6501",10,20
+5,"S1",10,30
+```
+
+The CSV layout differs from the poor version but records both completed rides. SonarQube for IDE results are recorded above, with full-file analysis coverage still to be confirmed. Prompt A review counts are recorded above; successful runtime checks do not establish design quality.
 
 4.1 Did SonarQube report any cohesion or coupling problem in bikeshare-poor? Quote the rule and the message if it did.
 
+SonarQube did not explicitly classify a method as having weak cohesion or an interaction as a particular coupling type. It did report a related encapsulation problem: `java:S2386`, “Make this member "protected".”, on the four public static array fields at `BikeShare.java:10–13`. Exposing mutable state allows callers to depend on and modify the internal representation, which can increase coupling. It also reported `java:S3776`, “Refactor this method to reduce its Cognitive Complexity from 25 to the 15 allowed.”, at `BikeShare.java:47`; this measures method complexity rather than directly identifying cohesion or coupling.
+
 4.2 Did the AI review tell the two versions apart? Give one finding for bikeshare-poor that does not appear for bikeshare-good.
 
+Yes. The poor-version review identified weak class cohesion in `BikeShare.java:9–94`, because one class combines fleet and rental state, console interaction, pricing, and CSV storage. The good-version review did not report this problem: these responsibilities are separated among `BikeShareService`, `Bike`, `ConsoleMenu`, `MemberType`, and `CsvRideStore`, with persistence accessed through `RideStore`. The reviews reported 5 code-quality and 4 design-quality findings for poor, compared with 1 and 2 for good; the remaining good-version findings show that the design is not problem-free.
+
 4.3 Which version would you rather extend with a new member type, such as a visitor who pays 4 baht per minute, and why?
+
+I would extend bikeshare-good because member categories and fee rates are centralized in `MemberType`. Adding `VISITOR(4)` would allow the existing enum parser and fee calculation to support the new category, while the console help text would also need updating; the service and CSV writer would not need a new pricing branch. In bikeshare-poor, I would need to update integer type codes, member-type parsing, the fee conditional, and help text inside the combined class. The good version therefore keeps this change smaller and makes it easier to test without changing unrelated rental or persistence behavior.
 
 ## Task 5. Reflection
 
 5.1 What does SonarQube check, and what does it not check? Answer with examples from this lab.
 
+SonarQube detects specific code issues, such as unused fields and unclosed resources. It does not fully judge design quality, such as whether a class combines too many responsibilities.
+
 5.2 When should you not trust the AI review? Give an example from this lab.
 
+I should not trust an AI finding without checking the code. For example, it described pickUp() calling fee() as coupling between classes, although both methods belong to ParcelService.
+
 5.3 What will you do differently in Project Phase 2 after this lab?
+
+In Project Phase 2, I will separate responsibilities and keep internal data private. I will use SonarQube and AI reviews, verify their findings, and test each fix before committing it.
 
 ## AI usage declaration
 
 | AI tool and exact model | Purpose | Files or parts that it produced or changed | How you checked its output |
 | --- | --- | --- | --- |
-| Codex (GPT-6, as identified by this session; exact UI variant not independently verified) | Validate findings and assist with Task 3 fixes and reporting | LAB_REPORT.md; ParcelService.java; Main.java | Compared findings to source; built after each fix; exercised pickup, reporting, CSV output, and a saving-failure case. |
+| Codex (GPT-6, as identified by this session; exact UI variant not independently verified) | Validate findings, assist with Task 3 fixes, and draft report answers including Task 5 | LAB_REPORT.md; ParcelService.java; Main.java | Compared findings to source; built after each fix; exercised pickup, reporting, CSV output, and a saving-failure case. |
+| Codex GPT 6.1 Sol Light (user-reported) | Generate the poor-design BikeShare version using Prompt B | bikeshare-poor/pom.xml; bikeshare-poor/src/main/java/BikeShare.java | Maven build succeeded; tested student and staff fees, cross-station returns, unavailable bikes, and inspected rides.csv. |
+| Codex GPT 6.1 Sol Light | Generate the good-design BikeShare version using Prompt C on 24 Oct 2026 | bikeshare-good/pom.xml; the eight Java files under bikeshare-good/src/main/java/bikeshare/ | Maven build succeeded; tested student and staff fees, cross-station returns, unavailable bikes, and inspected rides.csv. |
+| Codex GPT 6.1 Sol Light | Review bikeshare-poor using Prompt A on 24 Oct 2026 | reviews/bikeshare-poor-review.md | Recorded the full review and counted 5 Check 1 findings and 4 Check 2 findings, excluding not-found rows; comparison is documented in Task 4. |
+| Codex GPT 6.1 Sol Light | Review bikeshare-good using Prompt A on 24 Oct 2026 | reviews/bikeshare-good-review.md | Recorded the full review and counted 1 Check 1 finding and 2 Check 2 findings, excluding not-found rows; comparison is documented in Task 4. |

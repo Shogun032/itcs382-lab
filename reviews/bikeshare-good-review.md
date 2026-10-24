@@ -1,0 +1,16 @@
+Files read (under `bikeshare-good/src/main/java/bikeshare/`): `Bike.java`, `BikeShareService.java`, `ConsoleMenu.java`, `CsvRideStore.java`, `Main.java`, `MemberType.java`, `RideStore.java`, `Station.java`.
+
+Locations below are relative to that directory.
+
+| No. | Check | Code location (file:line) | Finding | Severity | Suggested fix |
+| --- | --- | --- | --- | --- | --- |
+| 1 | 1 — Probable bug | `CsvRideStore.java:19–22`; `BikeShareService.java:44–46`; `ConsoleMenu.java:34` | Appending is not atomic: a write or close can fail after some or all of the row reaches the file, while the bike remains rented; retrying the return can therefore leave a damaged or duplicate record. | Should fix | Commit the updated CSV through a temporary file and atomic replacement before completing the return. |
+| 2 | 2 — Method cohesion | `ConsoleMenu.java:42–60` | `execute()` has **logical cohesion**: a command selects between two different activities, each with its own argument parsing, service operation and output. | Note | Extract the rent and return branches into separate methods and leave `execute()` as the dispatcher. |
+| 3 | 2 — Connascence | `ConsoleMenu.java:18–19,46,49`; `Station.java:4`; `MemberType.java:4` | **Connascence of convention**: accepted command tokens must match enum constant names after case conversion, while the help text separately repeats the supported values; renaming or adding a constant can silently change the command language or make the help inaccurate. | Should fix | Give the enums explicit command tokens and use those tokens for both parsing and help text. |
+| — | 1 — Other requested defects | `Bike.java:18,22,29`; `CsvRideStore.java:3–22`; `Main.java:3–13`; remaining files listed above | Unclosed resources, incorrect object `==` comparisons, unused imports or fields, unnecessary unused parameters, empty blocks, and excessively repeated string literals: **not found**; the unused `main` parameter is the standard entry-point parameter. | — | — |
+| — | 1 — Method size and complexity | `ConsoleMenu.java:17–60`; `BikeShareService.java:23–47`; remaining methods in the files listed above | Methods too long or complex to read easily: **not found**. | — | — |
+| — | 2 — Other method and class cohesion | `Main.java:8–13`; `BikeShareService.java:15–47`; `Bike.java:8–37`; `CsvRideStore.java:13–22`; `MemberType.java:8–16`; `ConsoleMenu.java:12–39` | Other methods with procedural, temporal, logical or coincidental cohesion: **not found**; classes representing unrelated things or containing unrelated operations on other classes’ attributes: **not found**. | — | — |
+| — | 2 — Coupling | `Main.java:9–12`; `ConsoleMenu.java:46–55`; `BikeShareService.java:16–45`; `Bike.java:32`; `CsvRideStore.java:19–21` | Interclass stamp, control, common or content coupling: **not found**; excessive dependency counts and reach-through calls to another object’s collaborators: **not found**. Passing an enum or a service object alone does not establish control or stamp coupling. | — | — |
+| — | 2 — Encapsulation | `Bike.java:4–6`; `BikeShareService.java:11–13`; `ConsoleMenu.java:9–10`; `CsvRideStore.java:11`; `MemberType.java:6` | Non-private instance fields and operations returning mutable internal collections: **not found**. | — | — |
+
+Number of findings: **Check 1: 1. Check 2: 2.** Rows marked “not found” are excluded.
